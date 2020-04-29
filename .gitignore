@@ -1,2 +1,9 @@
 .idea
 target
+.settings
+.classpath
+.project
+.vscode
+docker/cache
+docker/grafana/plugins
+docker/grafana/sessions
