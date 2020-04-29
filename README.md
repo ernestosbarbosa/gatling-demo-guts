@@ -39,7 +39,7 @@ Como IDE sugiro o [IntelliJ](https://www.jetbrains.com/idea/).
 
 Para executar os testes pela IDE é possível executar o arquivo `Engine.scala`.
 
-Para configurar a quantidade de usuários, bem como o tipo de carga a ser realizada, é necessário ajustar o arquivo `SimulacaoApi.scala`.
+Para configurar a quantidade de usuários, bem como o tipo de carga a ser realizada, é necessário ajustar o arquivo `SimulationApi.scala`.
 
 ### Execução por linha de comando
 
