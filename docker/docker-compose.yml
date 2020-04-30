@@ -1,0 +1,52 @@
+version: '3'
+services:
+ gatling:
+  image: maven:alpine
+  env_file:
+   - config.env
+  volumes:
+   - ./cache/repository:/root/.m2/repository
+   - ./cache/gatling:/results
+   - ..:/gatling
+   - ./gatling/gatling.conf:/gatling/src/test/resources/gatling.conf:ro
+  working_dir: /gatling
+  entrypoint: mvn clean gatling:test -Dgatling.resultsFolder=/results -Dgatling.noReports=true
+  command: -Dgatling.simulationClass=simulation.ComicCharactersSimulationApi -DUSERS=10 -DRAMP_DURATION=20 -DDURATION=120
+  links:
+   - influxdb
+   - grafana
+  logging:
+   options:
+    max-size: 1m
+
+ influxdb:
+   image: influxdb:alpine
+   environment:
+    - TZ=America/Sao_Paulo
+   volumes:
+    - ./cache/influxdb/data:/var/lib/influxdb
+    - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+   expose:
+    - 8083/tcp
+    - 8086/tcp
+    - 2003/tcp
+   ports:
+    - "8086:8086"
+   logging:
+    options:
+     max-size: 1m
+
+ grafana:
+   image: grafana/grafana
+   env_file:
+    config.env
+   volumes:
+    - ./grafana/data:/var/lib/grafana
+    - ./grafana/provisioning/:/etc/grafana/provisioning
+   ports:
+    - "3000:3000"
+   links:
+    - influxdb
+   logging:
+    options:
+     max-size: 1m
