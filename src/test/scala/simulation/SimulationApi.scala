@@ -1,24 +1,21 @@
 package simulation
 
+import base.BaseSimulation
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+
 import scala.concurrent.duration._
 
-class SimulationApi extends Simulation {
+class SimulationApi extends BaseSimulation {
 
-	val httpConf = http
-		.baseUrl("https://service-testing-crud-api.herokuapp.com")
-		.header("Content-Type", "application/json; charset=utf-8")
-		.inferHtmlResources()
-
-	val feederDemo = csv("data/demoData.csv").random.circular
+	val feederDemo = csv("data/nameJobData.csv").random.circular
 
 	val scn = scenario("Meu primeiro Teste")
 		.feed(feederDemo)
 		.exec(
 			http("Cria um usuario")
 				.post("/users")
-				.body(ElFileBody("bodies/demoBody.json"))
+				.body(ElFileBody("bodies/nameJobBody.json"))
 				.check(status.is(201))
 				.check(jsonPath("$.name").is("${name}"))
 				.check(jsonPath("$.id").exists.saveAs("id"))
